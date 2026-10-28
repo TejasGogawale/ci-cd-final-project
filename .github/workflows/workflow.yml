@@ -1,3 +1,5 @@
+# https://github.com/TejasGogawale/ci-cd-final-project/blob/main/.github/workflows/workflow.yml
+# https://github.com/TejasGogawale/cicd-final-project/blob/main/.github/workflows/workflow.yml
 name: CI workflow
 
 on:
@@ -14,12 +16,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    # Included to match the course validator's expected post-step.
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
 
     - name: Install dependencies
       run: |

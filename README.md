@@ -1,6 +1,11 @@
 # CI/CD Tools and Practices Final Project Template
 
-## Project Name: ci-cd-final-project
+ci-cd-final-project
+cicd-final-project
+
+Public GitHub URL:
+- https://github.com/TejasGogawale/ci-cd-final-project/blob/main/README.md
+- https://github.com/TejasGogawale/cicd-final-project/blob/main/README.md
 
 This repository contains the template to be used for the Final Project for the Coursera course **CI/CD Tools and Practices**.
 
@@ -10,7 +15,7 @@ This repository is to be used as a template to create your own repository in you
 
 From the GitHub **Code** page, press the green **Use this template** button to create your own repository from this template.
 
-Name your repo: `ci-cd-final-project`.
+Name your repo: `ci-cd-final-project` (`cicd-final-project`).
 
 ## Setup
 
@@ -26,15 +31,6 @@ Then you must exit the shell and start a new one for the Python virtual environm
 exit
 ```
 
-## Tasks
-
-
 ## License
 
 Licensed under the Apache License. See [LICENSE](/LICENSE)
-
-## Author
-
-Skills Network
-
-## <h3 align="center"> © IBM Corporation 2023. All rights reserved. <h3/>
