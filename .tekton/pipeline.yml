@@ -1,0 +1,114 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: oc-lab-pvc
+spec:
+  storageClassName: skills-network-learner
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: oc-pipelines-oc-final
+spec:
+  workspaces:
+    - name: output
+  params:
+    - name: repo-url
+      description: The git repo URL
+      type: string
+      default: https://github.com/TejasGogawale/ci-cd-final-project.git
+    - name: branch
+      description: The git branch
+      type: string
+      default: main
+    - name: build-image
+      description: The image to build
+      type: string
+    - name: app-name
+      description: The application name
+      type: string
+      default: counters
+  tasks:
+    - name: cleanup
+      workspaces:
+        - name: source
+          workspace: output
+      taskRef:
+        name: cleanup
+        kind: Task
+
+    - name: git-clone
+      workspaces:
+        - name: output
+          workspace: output
+      taskRef:
+        name: git-clone
+        kind: ClusterTask
+      params:
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.branch)
+      runAfter:
+        - cleanup
+
+    - name: flake8
+      workspaces:
+        - name: source
+          workspace: output
+      taskRef:
+        name: flake8
+        kind: Task
+      params:
+        - name: image
+          value: python:3.9-slim
+        - name: args
+          value: ["--count", "--max-complexity=10", "--max-line-length=127", "--statistics"]
+      runAfter:
+        - git-clone
+
+    - name: nose
+      workspaces:
+        - name: source
+          workspace: output
+      taskRef:
+        name: nose
+        kind: Task
+      params:
+        - name: args
+          value: "-v --with-spec --spec-color"
+      runAfter:
+        - flake8
+
+    - name: buildah
+      workspaces:
+        - name: source
+          workspace: output
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      params:
+        - name: IMAGE
+          value: $(params.build-image)
+      runAfter:
+        - nose
+
+    - name: deploy
+      workspaces:
+        - name: manifest-dir
+          workspace: output
+      taskRef:
+        name: openshift-client
+        kind: ClusterTask
+      params:
+        - name: SCRIPT
+          value: |
+            oc create deployment $(params.app-name) --image=$(params.build-image) --dry-run=client -o yaml | oc apply -f -
+      runAfter:
+        - buildah

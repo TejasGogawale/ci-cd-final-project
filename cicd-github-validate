@@ -1,0 +1,23 @@
+$ gh run list
+STATUS  TITLE                                                   WORKFLOW                      BRANCH  EVENT  ID           ELAPSED  AGE
+✓       Complete CI/CD final project workflow and Tekton tasks  CI workflow                   main    push   40655524448  24s      1m
+X       Initial commit                                          .github/workflows/workflow.yml main   push   40654526822  0s       19m
+
+$ gh run view 40655524448 --verbose
+✓ main CI workflow · 40655524448
+Triggered via push about 1 minute ago
+
+JOBS
+✓ build in 24s (ID 122705507919)
+  ✓ Set up job
+  ✓ Initialize containers
+  ✓ Checkout
+  ✓ Install dependencies
+  ✓ Lint with flake8
+  ✓ Run unit tests with nose
+  ✓ Post Checkout
+  ✓ Stop containers
+  ✓ Complete job
+
+For more information about a job, try: gh run view --job=122705507919
+View this run on GitHub: https://github.com/TejasGogawale/ci-cd-final-project/actions/runs/40655524448
